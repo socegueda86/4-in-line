@@ -23,4 +23,6 @@ describe Game do
       expect(subject.create_board.flatten.count).to eql(42)
     end
   end
+
+  
 end
