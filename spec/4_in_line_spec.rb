@@ -27,18 +27,19 @@ describe Game do
   describe "#place_marker" do
     subject { Game.new }
 
-    xit "checks that the markers goes all the way down until it hits bottom" do
-        expect(subject.place_marker('A','X')).to eql([[nil, nil, nil, nil, nil, nil, nil],
+    it "checks that the markers goes all the way down until it hits bottom" do
+      subject.place_marker('A','X')
+      expect(subject.board).to eq([[nil, nil, nil, nil, nil, nil, nil],
                                                       [nil, nil, nil, nil, nil, nil, nil],
                                                       [nil, nil, nil, nil, nil, nil, nil],
                                                       [nil, nil, nil, nil, nil, nil, nil],
                                                       [nil, nil, nil, nil, nil, nil, nil],
-                                                      ['X', nil, nil, nil, nil, nil, nil]])
+                                                      ["X", nil, nil, nil, nil, nil, nil]])
     end
 
     xit "checks that the markers goes all the way down until it hits another marker" do
       subject.place_marker('A','X')
-      expect(subject.place_marker('A','X')).to eql([[nil, nil, nil, nil, nil, nil, nil],
+      expect(subject.place_marker('A','X')).to eq([[nil, nil, nil, nil, nil, nil, nil],
                                                     [nil, nil, nil, nil, nil, nil, nil],
                                                     [nil, nil, nil, nil, nil, nil, nil],
                                                     [nil, nil, nil, nil, nil, nil, nil],
@@ -48,7 +49,7 @@ describe Game do
 
     xit "checks that the markers goes all the way down until it hits another marker" do
 #2.tiomes {subject.place_marker('A', 'X')}  probably i should try to erase this, lets check if the subject its accumulating the markers or if every test its a new start
-      expect(subject.place_marker('E', 'X')).to eql([[nil, nil, nil, nil, nil, nil, nil],
+      expect(subject.place_marker('E', 'X')).to eq([[nil, nil, nil, nil, nil, nil, nil],
                                                      [nil, nil, nil, nil, nil, nil, nil],
                                                      [nil, nil, nil, nil, nil, nil, nil],
                                                      [nil, nil, nil, nil, nil, nil, nil],
@@ -60,19 +61,19 @@ describe Game do
   describe '#column_letter_to_number' do
 
     it "checks that the column A is correctly change in to number 1" do
-      expect(subject.column_letter_to_number('A')).to eql(1)
+      expect(subject.column_letter_to_number('A')).to eql(0)
     end
 
     it "checks that the column F is correctly change in to number 6" do
-        expect(subject.column_letter_to_number('F')).to eql(6)
+        expect(subject.column_letter_to_number('F')).to eql(5)
     end
 
     it "checks that the column C is correctly change in to number 3" do
-      expect(subject.column_letter_to_number('C')).to eql(3)
+      expect(subject.column_letter_to_number('C')).to eql(2)
     end
 
     it "checks that the column G is correctly change in to number 7" do
-      expect(subject.column_letter_to_number('G')).to eql(7)
+      expect(subject.column_letter_to_number('G')).to eql(6)
     end
   end
   
@@ -119,7 +120,7 @@ describe Game do
 
     it  "Checks if the theres space in the column" do
       # im filling the column with this line, cause the placing is not ready and function will depend on this one.
-      (0..5).each {|i| subject.board[i][1] = 'X'} 
+      (0..5).each {|i| subject.board[i][0] = 'X'} 
       expect(subject.is_space_in_column('A')).to be false
     end
 

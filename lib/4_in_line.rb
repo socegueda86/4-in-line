@@ -21,13 +21,17 @@ class Game
 
   def place_marker(column, marker)
     column = column_letter_to_number(column)
+
+    row_position = (0..5).find {|i| @board[5 - i][column].nil?}
+
+    @board[row_position][column] = marker
   end
 
   def column_letter_to_number(column)
-    hash_letter_to_numbers = {'A' => 1, 'B' => 2, 'C' => 3, 'D' => 4, 'E' => 5, 'F' => 6, 'G' => 7,}
+    hash_letter_to_numbers = {'A' => 0, 'B' => 1, 'C' => 2, 'D' => 3, 'E' => 4, 'F' => 5, 'G' => 6,}
     hash_letter_to_numbers.fetch(column)
   end
-
+  
   def user_input_verifier(user_input)  # this would check if the colums are among A - G, if the columns aren't full, if the values are appropiate 'A'-'G'
     return false if user_input.length > 1 
 
@@ -38,7 +42,7 @@ class Game
   end
 
   def is_space_in_column(user_input)
-    (0...6).any? {|i| @board[5-i][column_letter_to_number(user_input)].nil?}
+    (0...6).any? {|i| @board[5 - i][column_letter_to_number(user_input)].nil?}
   end
 end
 
