@@ -24,7 +24,7 @@ class Game
 
     row_position = (0..5).find {|i| @board[5 - i][column].nil?}
 
-    @board[row_position][column] = marker
+    @board[5 - row_position][column] = marker
   end
 
   def column_letter_to_number(column)

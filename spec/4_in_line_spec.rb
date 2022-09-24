@@ -37,9 +37,10 @@ describe Game do
                                                       ["X", nil, nil, nil, nil, nil, nil]])
     end
 
-    xit "checks that the markers goes all the way down until it hits another marker" do
+    it "checks that the markers goes all the way down until it hits another marker" do
       subject.place_marker('A','X')
-      expect(subject.place_marker('A','X')).to eq([[nil, nil, nil, nil, nil, nil, nil],
+      subject.place_marker('A','X')
+      expect(subject.board).to eq([[nil, nil, nil, nil, nil, nil, nil],
                                                     [nil, nil, nil, nil, nil, nil, nil],
                                                     [nil, nil, nil, nil, nil, nil, nil],
                                                     [nil, nil, nil, nil, nil, nil, nil],
@@ -47,9 +48,10 @@ describe Game do
                                                     ['X', nil, nil, nil, nil, nil, nil]])
     end
 
-    xit "checks that the markers goes all the way down until it hits another marker" do
-#2.tiomes {subject.place_marker('A', 'X')}  probably i should try to erase this, lets check if the subject its accumulating the markers or if every test its a new start
-      expect(subject.place_marker('E', 'X')).to eq([[nil, nil, nil, nil, nil, nil, nil],
+    it "checks that the markers goes all the way down until it hits another marker" do
+      2.times {subject.place_marker('A','X')}
+      subject.place_marker('E','X')
+      expect(subject.board).to eq([[nil, nil, nil, nil, nil, nil, nil],
                                                      [nil, nil, nil, nil, nil, nil, nil],
                                                      [nil, nil, nil, nil, nil, nil, nil],
                                                      [nil, nil, nil, nil, nil, nil, nil],
