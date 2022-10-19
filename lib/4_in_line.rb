@@ -1,8 +1,12 @@
 class Game
   attr_reader :board
+  HASH_LETTER_TO_INDEX = {'A' => 0, 'B' => 1, 'C' => 2, 'D' => 3, 'E' => 4, 'F' => 5, 'G' => 6,}
 
   def initialize()
     @board = create_board()
+    @players = []
+    @last_move 
+    
   end
 
   def create_board
@@ -20,29 +24,82 @@ class Game
   end
 
   def place_marker(column, marker)
-    column = column_letter_to_number(column)
+    column = column_letter_to_array_index(column)
 
     row_position = (0..5).find {|i| @board[5 - i][column].nil?}
 
     @board[5 - row_position][column] = marker
+    @last_move = [row_position, column]
   end
 
-  def column_letter_to_number(column)
-    hash_letter_to_numbers = {'A' => 0, 'B' => 1, 'C' => 2, 'D' => 3, 'E' => 4, 'F' => 5, 'G' => 6,}
-    hash_letter_to_numbers.fetch(column)
+  #Since the array uses indexes not letters, this method is a dictionary to change letters to index
+  def column_letter_to_array_index(column) 
+    HASH_LETTER_TO_INDEX.fetch(column)
   end
   
-  def user_input_verifier(user_input)  # this would check if the colums are among A - G, if the columns aren't full, if the values are appropiate 'A'-'G'
+  # this would check if the colums are among A - G, if the values are appropiate 'A'-'G'
+  def user_input_verifier(user_input)  
     return false if user_input.length > 1 
-
     user_input = user_input.upcase
     return false if user_input.match(/[A-G]/).nil?
     puts "Invalid input: please try again"
     true
   end
 
-  def is_space_in_column(user_input)
-    (0...6).any? {|i| @board[5 - i][column_letter_to_number(user_input)].nil?}
+  def is_column_full?(user_input)
+    (0...6).any? {|i| @board[5 - i][column_letter_to_array_index(user_input)].nil?}
   end
+
+  def win?(users_mark)
+    return true if diagonal_bottom_to_top_win?(users_mark)
+
+    false
+  end
+  
+  def check_for_last_move
+    @last_move
+  end
+
+  def diagonal_bottom_to_top_win?(users_mark)
+    count = 1
+    row = @last_move[0]
+    column = @last_move[1]
+    
+    #next line checks the diagonal to the left and bottom
+    while row >= 0 && column >= 0 && row <= 5 &&  column[1] <= 6
+      if @board[row][column] == users_mark
+        count += 1
+        row -= 1
+        column -= 1
+      else
+        row = @last_move[0] + 1
+        column = @last_move[1] + 1
+        break
+      end
+    end
+
+    #next line checks the diagonal to the left and bottom
+    while row >= 0 && column >= 0 && row <= 5 &&  column[1] <= 6
+      if @board[row][column] == users_mark
+        count += 1
+        row += 1
+        column += 1
+      else
+        row = @last_move[0]
+        column = @last_move[1]
+        break
+      end
+    end
+  
+  return true if count >= 4
+  false
+
+  end
+    
 end
 
+game = Game.new
+
+#class HumanPlayer < Player
+#
+#  def 

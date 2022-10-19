@@ -1,8 +1,8 @@
-require './lib/4_in_line.rb'
+require '../lib/4_in_line.rb'
 
 describe Game do
   describe "#create_board" do
-    it "creates board" do 
+    it "creates a board" do 
       expect(subject.create_board).to eql([[nil, nil, nil, nil, nil, nil, nil],
                                            [nil, nil, nil, nil, nil, nil, nil],
                                            [nil, nil, nil, nil, nil, nil, nil],
@@ -60,22 +60,22 @@ describe Game do
     end
   end
 
-  describe '#column_letter_to_number' do
+  describe '#column_letter_to_array_index' do
 
     it "checks that the column A is correctly change in to number 1" do
-      expect(subject.column_letter_to_number('A')).to eql(0)
+      expect(subject.column_letter_to_array_index('A')).to eql(0)
     end
 
     it "checks that the column F is correctly change in to number 6" do
-        expect(subject.column_letter_to_number('F')).to eql(5)
+        expect(subject.column_letter_to_array_index('F')).to eql(5)
     end
 
     it "checks that the column C is correctly change in to number 3" do
-      expect(subject.column_letter_to_number('C')).to eql(2)
+      expect(subject.column_letter_to_array_index('C')).not_to eql(3)
     end
 
     it "checks that the column G is correctly change in to number 7" do
-      expect(subject.column_letter_to_number('G')).to eql(6)
+      expect(subject.column_letter_to_array_index('G')).to eql(6)
     end
   end
   
@@ -109,27 +109,85 @@ describe Game do
       expect(subject.user_input_verifier('ABC')).to be false
     end
 
-    it "Doesn't accepts more than one character as an inpunt" do
+    it "Doesn't accept more than one character as an input" do
       expect(subject.user_input_verifier('1234')).to be false
     end
   end
 
-  describe '#is_space_in_column' do 
+  describe '#is_column_full?' do 
 
     it  "Checks if the theres space in the column" do
-      expect(subject.is_space_in_column('A')).to be true
+      expect(subject.is_column_full?('A')).to be true
     end
 
     it  "Checks if the theres space in the column" do
       # im filling the column with this line, cause the placing is not ready and function will depend on this one.
       (0..5).each {|i| subject.board[i][0] = 'X'} 
-      expect(subject.is_space_in_column('A')).to be false
+      expect(subject.is_column_full?('A')).to be false
     end
 
     it "Checks if the theres space in the column" do
       (0..4).each {|i| subject.board[5-i][1] = 'X'}
-      expect(subject.is_space_in_column('A')).to be true
+      expect(subject.is_column_full?('A')).to be true
+    end
+  end
+
+  describe "#check_for_last_move" do
+    subject { Game.new }
+    
+    context "It should return the an array with the [row, column] after 3 inputs" do 
+      before do
+        test_inputs = %w(A B A)
+        for index in 0...test_inputs.length do
+          index.even? ? (subject.place_marker(test_inputs[index], 'X')) : (subject.place_marker(test_inputs[index], '0')) 
+        end
+      end
+
+      it "check for the position of the last input" do
+        expect(subject.check_for_last_move).to eql([1,0])
+      end
+    end
+    
+    context "It should return the an array with the [column, row] after 4 inputs" do 
+      before do
+        test_inputs = %w(A B A B)
+        for index in 0...test_inputs.length do
+          index.even? ? (subject.place_marker(test_inputs[index], 'X')) : (subject.place_marker(test_inputs[index], '0')) 
+        end
+      end
+
+      it "check for the position of the last input" do
+        expect(subject.check_for_last_move).to eql([1,1])
+      end
     end
 
+    context "It should return the an array with the [column, row] after 9 inputs" do 
+
+      before do
+        test_inputs = %w(A B C D B C B D C D)
+        for index in 0...test_inputs.length do
+          index.even? ? (subject.place_marker(test_inputs[index], 'X')) : (subject.place_marker(test_inputs[index], '0')) 
+        end
+      end
+
+      it "check for the position of the last input" do
+        expect(subject.check_for_last_move).to eql([2,3])
+      end
+    end
+
+    context "It should return the an array with the [column, row] after 10 inputs" do 
+
+      before do
+        test_inputs = %w(A B C D B C B D C D E)
+        for index in 0...test_inputs.length do
+          index.even? ? (subject.place_marker(test_inputs[index], 'X')) : (subject.place_marker(test_inputs[index], '0')) 
+        end
+      end
+      it "check for the position of the last input" do
+        expect(subject.check_for_last_move).to eql([0,4])
+      end
+    end
   end
+
 end
+
